@@ -1,0 +1,64 @@
+#include <iostream>
+#include <string>
+#include "Show.h"
+#include "Movie.h"
+
+// Watch function: Handles info(), details(), and play()
+void watch(Show& show) {
+    show.info();      // Call info() first (prints title)
+    show.details();   // Call details() (prints title, description, and opening credits if applicable)
+    show.play();      // Call play() (prints opening credits if Movie)
+}
+
+int main() {
+    char cont = 'Y';
+    while (cont == 'Y' || cont == 'y') {
+        std::string title, description, openingCredits;
+        int choice;
+
+        std::cout << "Press 1 for creating an instance of Show.\n";
+        std::cout << "Press 2 for creating an instance of Movie.\n";
+        std::cout << "Press 3 for creating an instance of a Movie declared as a Show.\n";
+        std::cin >> choice;
+        std::cin.ignore();  // Clear input stream for getline
+
+        std::cout << "Enter title: ";
+        std::getline(std::cin, title);
+        std::cout << "Enter description: ";
+        std::getline(std::cin, description);
+
+        Show* showInstance = nullptr;
+
+        if (choice == 1) {
+
+            showInstance = new Show(title, description);
+        }
+        else if (choice == 2) {
+            std::cout << "Enter opening credits: ";
+            std::getline(std::cin, openingCredits);
+
+            Movie movie(title, description, openingCredits);
+
+            movie.info();  
+            movie.details();
+            movie.play();
+
+            watch(movie);
+        }
+        else if (choice == 3) {
+            std::cout << "Enter opening credits: ";
+            std::getline(std::cin, openingCredits);
+            showInstance = new Movie(title, description, openingCredits);
+        }
+
+        if (showInstance) {
+            watch(*showInstance);
+            delete showInstance;
+        }
+
+        std::cout << "Do you want to continue? (Y/N): ";
+        std::cin >> cont;
+    }
+
+    return 0;
+}
